@@ -1,0 +1,24 @@
+# Local n8n for DayMate workflows.  Start:  docker compose up -d   |  UI: http://localhost:5678
+services:
+  n8n:
+    image: docker.n8n.io/n8nio/n8n:latest
+    container_name: daymate-n8n
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:5678:5678"   # reachable only from this machine
+    environment:
+      # Where the workflows reach the DayMate server running on your host.
+      - DAYMATE_URL=http://host.docker.internal:8000
+      # Workflows read DAYMATE_URL through $env.
+      - N8N_BLOCK_ENV_ACCESS_IN_NODE=false
+      - GENERIC_TIMEZONE=Asia/Karachi
+      - TZ=Asia/Karachi
+      - N8N_SECURE_COOKIE=false   # plain-http localhost only
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - n8n_data:/home/node/.n8n
+      - ./n8n:/workflows:ro        # DayMate workflow JSON files, for import
+
+volumes:
+  n8n_data:

@@ -1,0 +1,28 @@
+2026-11-03 21:06:21,703 daymate.telegram INFO Telegram bot polling...
+2026-11-03 21:06:42,940 daymate.telegram WARNING getUpdates failed: ConnectError
+2026-11-03 21:07:09,035 daymate.telegram WARNING getUpdates failed: ConnectError
+2026-11-03 21:07:48,715 daymate.telegram WARNING getUpdates failed: ConnectError
+2026-11-03 21:08:14,784 daymate.telegram WARNING getUpdates failed: ConnectError
+2026-11-03 21:08:40,842 daymate.telegram WARNING getUpdates failed: ConnectError
+2026-11-03 21:09:06,911 daymate.telegram WARNING getUpdates failed: ConnectError
+2026-11-03 21:09:32,979 daymate.telegram WARNING getUpdates failed: ConnectError
+2026-11-03 21:09:59,189 daymate.telegram WARNING getUpdates failed: ConnectError
+2026-11-03 21:10:25,347 daymate.telegram WARNING getUpdates failed: ConnectError
+2026-11-03 21:10:51,405 daymate.telegram WARNING getUpdates failed: ConnectError
+2026-11-03 21:11:24,197 daymate.telegram WARNING getUpdates failed: ConnectError
+2026-11-03 21:13:30,584 daymate.telegram WARNING getUpdates failed: ReadError
+2026-11-03 21:13:35,733 daymate.telegram WARNING getUpdates failed: ConnectError
+2026-11-03 21:34:24,643 mcp.client.streamable_http INFO Negotiated protocol version: 2025-11-25
+2026-11-03 21:34:26,674 daymate.agent INFO tool create_reminder({'message': 'submitt an assignment', 'scheduled_at': '2026-11-03T21:36:00'}) -> error=False
+2026-11-03 21:37:26,350 mcp.client.streamable_http INFO Negotiated protocol version: 2025-11-25
+2026-11-03 21:37:42,637 mcp.client.streamable_http INFO Negotiated protocol version: 2025-11-25
+2026-11-03 21:37:44,298 daymate.agent INFO tool create_reminder({'message': 'submit proposal', 'scheduled_at': '2026-11-03T21:38:00'}) -> error=False
+2026-11-03 21:41:17,533 mcp.client.streamable_http INFO Negotiated protocol version: 2025-11-25
+2026-11-03 21:41:18,954 daymate.agent INFO tool get_weekly_summary({}) -> error=False
+2026-11-03 21:43:56,268 mcp.client.streamable_http INFO Negotiated protocol version: 2025-11-25
+2026-11-03 21:43:57,771 daymate.agent INFO tool add_diary_entry({'description': 'Today I worked on my DayMate project for 3 hours', 'duration_minutes': 180, 'entry_date': '2026-11-03'}) -> error=False
+2026-11-03 21:43:58,698 daymate.agent INFO tool add_diary_entry({'description': 'I attended a team meeting', 'entry_date': '2026-11-03'}) -> error=False
+2026-11-03 21:43:59,638 daymate.agent INFO tool add_diary_entry({'description': 'Yesterday I studied Python for 2 hour', 'duration_minutes': 120, 'entry_date': '2026-11-02'}) -> error=False
+2026-11-03 21:44:00,235 groq._base_client INFO Retrying request to /openai/v1/chat/completions in 2.000000 seconds
+2026-11-03 21:44:03,129 daymate.agent INFO tool get_weekly_summary({'end_date': '2026-11-03', 'start_date': '2026-10-28'}) -> error=False
+2026-11-03 21:44:03,384 groq._base_client INFO Retrying request to /openai/v1/chat/completions in 3.000000 seconds

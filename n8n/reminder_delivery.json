@@ -1,0 +1,261 @@
+{
+  "name": "DayMate - Reminder Delivery",
+  "nodes": [
+    {
+      "id": "r1",
+      "name": "Every Minute",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        200,
+        0
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 1
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "r2",
+      "name": "Test now (manual)",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        200,
+        200
+      ],
+      "parameters": {},
+      "notes": "Click 'Execute workflow' to run this path immediately."
+    },
+    {
+      "id": "r3",
+      "name": "Claim Due Reminders",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        440,
+        100
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.DAYMATE_URL }}/api/reminders/claim-due?limit=20",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "",
+          "name": "DayMate API"
+        }
+      },
+      "notes": "Atomically leases due reminders (default 5 min). An overlapping or retried run receives none of them."
+    },
+    {
+      "id": "r4",
+      "name": "Any reminders due?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        660,
+        100
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "r4-c",
+              "leftValue": "={{ ($json.reminders || []).length }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "r5",
+      "name": "Split Out Reminders",
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        880,
+        0
+      ],
+      "parameters": {
+        "fieldToSplitOut": "reminders",
+        "options": {}
+      }
+    },
+    {
+      "id": "r6",
+      "name": "Deliver via DayMate (server sends Telegram)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1100,
+        0
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.DAYMATE_URL }}/api/reminders/{{ $json.id }}/deliver",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {
+          "timeout": 90000
+        }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "",
+          "name": "DayMate API"
+        }
+      },
+      "onError": "continueErrorOutput",
+      "retryOnFail": false,
+      "notes": "The host server sends the message, then records sent / retry / failed. 2xx = delivered or already handled; non-2xx = not delivered (already recorded). Keep n8n retry OFF: retries are governed by the server lease and REMINDER_MAX_ATTEMPTS."
+    },
+    {
+      "id": "r7",
+      "name": "Delivered",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1340,
+        -80
+      ],
+      "parameters": {},
+      "notes": "Telegram confirmed; reminder is now status=sent."
+    },
+    {
+      "id": "r8",
+      "name": "Delivery failed (will retry)",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1340,
+        100
+      ],
+      "parameters": {},
+      "notes": "Reminder stays pending and is re-claimed after the lease expires, up to REMINDER_MAX_ATTEMPTS, then status=failed."
+    },
+    {
+      "id": "r9",
+      "name": "Nothing due",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        880,
+        200
+      ],
+      "parameters": {},
+      "notes": "No pending reminders are due right now."
+    }
+  ],
+  "connections": {
+    "Every Minute": {
+      "main": [
+        [
+          {
+            "node": "Claim Due Reminders",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Test now (manual)": {
+      "main": [
+        [
+          {
+            "node": "Claim Due Reminders",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Claim Due Reminders": {
+      "main": [
+        [
+          {
+            "node": "Any reminders due?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Any reminders due?": {
+      "main": [
+        [
+          {
+            "node": "Split Out Reminders",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Nothing due",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out Reminders": {
+      "main": [
+        [
+          {
+            "node": "Deliver via DayMate (server sends Telegram)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Deliver via DayMate (server sends Telegram)": {
+      "main": [
+        [
+          {
+            "node": "Delivered",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Delivery failed (will retry)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Karachi"
+  },
+  "active": false
+}

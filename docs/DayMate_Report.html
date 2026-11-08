@@ -1,0 +1,257 @@
+<title>DayMate Project Report</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Newsreader:opsz,wght@6..72,500;6..72,600&display=swap">
+<style>
+/* Layout: single reading column, report-style; tables and diagrams scroll in their own boxes */
+:root {
+  --bg: #f7f8f6; --surface: #ffffff; --fg: #1d2421; --muted: #5b6862; --line: #d9dfdb; --accent: #2f6b55; --accent-soft: #e3efe9;
+  --display: "Newsreader", Georgia, "Times New Roman", serif;
+  --body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #141a17; --surface: #1b2320; --fg: #e4ebe7; --muted: #9aa8a1; --line: #2e3a35; --accent: #7cc4a6; --accent-soft: #21332b; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #141a17; --surface: #1b2320; --fg: #e4ebe7; --muted: #9aa8a1; --line: #2e3a35; --accent: #7cc4a6; --accent-soft: #21332b; color-scheme: dark }
+
+body { background: var(--bg); color: var(--fg); font: 15px/1.6 var(--body); }
+.page { max-width: 860px; margin: 0 auto; padding-block: 40px 64px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: grid; gap: 36px; }
+header { display: grid; gap: 6px; border-bottom: 1px solid var(--line); padding-bottom: 20px; }
+.eyebrow { font: 500 12px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+h1 { font: 600 clamp(30px, 5vw, 40px)/1.15 var(--display); margin: 0; text-wrap: balance; }
+h2 { font: 600 22px/1.25 var(--display); margin: 0 0 10px; text-wrap: balance; }
+h3 { font: 600 15px/1.3 var(--body); margin: 18px 0 6px; }
+p { margin: 0 0 10px; max-width: 68ch; }
+.lede { color: var(--muted); font-size: 16px; }
+ul { margin: 0 0 10px; padding-left: 20px; max-width: 70ch; }
+li { margin: 3px 0; }
+code { font: 13px var(--mono); background: var(--accent-soft); padding: 1px 5px; border-radius: 4px; }
+section { min-width: 0; }
+.meta { display: flex; flex-wrap: wrap; gap: 8px 20px; font: 13px var(--mono); color: var(--muted); }
+.cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+.box { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 14px 16px; min-width: 0; }
+.box h3 { margin-top: 0; }
+.diagram { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 16px; overflow-x: auto; margin: 6px 0 10px; }
+.diagram pre { margin: 0; }
+.caption { font-size: 13px; color: var(--muted); margin-top: -2px; }
+.table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+th, td { text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font: 500 12px var(--mono); letter-spacing: .05em; text-transform: uppercase; color: var(--muted); }
+tr:last-child td { border-bottom: 0; }
+td:first-child { white-space: nowrap; font-family: var(--mono); font-size: 13px; }
+.status { font: 500 12px var(--mono); padding: 2px 8px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); white-space: nowrap; }
+.status.open { background: transparent; border: 1px solid var(--line); color: var(--muted); }
+pre.cmd { font: 13px/1.6 var(--mono); background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; overflow-x: auto; margin: 0 0 10px; }
+footer { font-size: 13px; color: var(--muted); border-top: 1px solid var(--line); padding-top: 16px; }
+</style>
+
+<div class="page">
+  <header>
+    <span class="eyebrow">CP1 · Task 1 &amp; Task 2</span>
+    <h1>DayMate: AI Daily Diary &amp; Reminder Assistant</h1>
+    <p class="lede">A Telegram assistant that logs your day, sets reminders and writes summaries. An LLM agent works through tools on a Python MCP server, and n8n runs the scheduled automation.</p>
+    <div class="meta"><span>Python 3.12</span><span>MCP (FastMCP, streamable HTTP)</span><span>Groq · gpt-oss-120b</span><span>SQLite</span><span>n8n 2.45 in Docker</span><span>Telegram Bot API</span></div>
+  </header>
+
+  <section>
+    <h2>Purpose</h2>
+    <p>People forget to record what they did and lose track of small deadlines. DayMate keeps both in one chat: you type what you did or what you need to remember, and the assistant stores it, reminds you on time and summarises your day or week from what was actually recorded.</p>
+    <p>For the assignment it demonstrates an <strong>MCP server whose tools are called by an AI agent</strong>, a <strong>real external API</strong> (Open-Meteo weather) and a working <strong>n8n agent workflow</strong>.</p>
+  </section>
+
+  <section>
+    <h2>Scope</h2>
+    <div class="cols">
+      <div class="box">
+        <h3>In scope</h3>
+        <ul>
+          <li>Diary: add, view by date or range, update entries</li>
+          <li>Reminders: create, list, cancel, delivered on time</li>
+          <li>Daily and weekly summaries built from stored entries</li>
+          <li>Weather: current, 15-day forecast, historical</li>
+          <li>Per-user timezone and per-user data isolation</li>
+        </ul>
+      </div>
+      <div class="box">
+        <h3>Out of scope</h3>
+        <ul>
+          <li>Web or mobile dashboard</li>
+          <li>Calendar sync, voice or image input</li>
+          <li>Recurring reminders</li>
+          <li>Long-term semantic memory or RAG</li>
+          <li>Cloud hosting (runs locally)</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Architecture</h2>
+    <p>One Python server is the single source of truth. The agent reaches it over MCP, and n8n reaches it over a small REST API on the same port. Neither the model nor n8n touches the database directly.</p>
+    <div class="diagram"><pre class="mermaid">
+flowchart LR
+  U([User on Telegram]) <--> TG[Telegram Bot API]
+  TG <--> BOT[Bot adapter<br/>long polling]
+  BOT --> AG[AI agent<br/>tool-calling loop]
+  AG <--> LLM[Groq LLM<br/>gpt-oss-120b]
+  AG -- "MCP over HTTP<br/>token + user header" --> SRV
+  subgraph SRV[DayMate server · 127.0.0.1:8000]
+    MCP[MCP tools] --> SVC[Services]
+    API[REST API for n8n] --> SVC
+    SVC --> DB[(SQLite)]
+    SVC --> SEND[Telegram sender]
+  end
+  SVC --> OM[Open-Meteo API]
+  SEND --> TG
+  N8N[n8n in Docker<br/>schedules] -- "REST + bearer token" --> API
+  N8N <--> LLM
+    </pre></div>
+    <p class="caption">Components and trust boundaries. n8n never calls Telegram itself; the server sends every message.</p>
+
+    <div class="table-wrap"><table>
+      <tr><th>Layer</th><th>Responsibility</th></tr>
+      <tr><td>app/messaging</td><td>Telegram adapter. Turns updates into plain messages and sends replies. No business logic.</td></tr>
+      <tr><td>app/agent</td><td>System prompt, Groq client and the loop that lets the model call MCP tools until it can answer.</td></tr>
+      <tr><td>app/mcp_server</td><td>FastMCP tools plus the REST endpoints for n8n. A bearer token protects both.</td></tr>
+      <tr><td>app/services</td><td>Diary, reminders, summaries, weather and delivery rules. All validation lives here.</td></tr>
+      <tr><td>app/database</td><td>SQLite schema and SQL. Every user-owned query filters on <code>user_id</code>.</td></tr>
+      <tr><td>n8n/</td><td>Three exported workflows: reminder delivery, daily summary, weekly report.</td></tr>
+    </table></div>
+  </section>
+
+  <section>
+    <h2>How a chat message works</h2>
+    <div class="diagram"><pre class="mermaid">
+sequenceDiagram
+  participant U as User
+  participant B as Bot
+  participant A as Agent
+  participant L as Groq LLM
+  participant M as MCP server
+  participant D as SQLite
+  U->>B: "Remind me tomorrow at 10 AM to submit my assignment"
+  B->>A: text + internal user id
+  A->>L: prompt (local time, timezone) + tool list
+  L-->>A: call create_reminder(message, scheduled_at)
+  A->>M: MCP call · headers: token, X-DayMate-User-Id
+  M->>D: validate, convert to UTC, insert
+  M-->>A: success: Tue 10:00 (Asia/Karachi)
+  A->>L: tool result
+  L-->>A: final reply
+  A-->>U: "Your reminder is set for Tue 10:00 (Asia/Karachi)"
+    </pre></div>
+    <p class="caption">The model chooses the tool and its arguments. The user's identity comes from the bot, never from the model.</p>
+
+    <h3>MCP tools</h3>
+    <div class="table-wrap"><table>
+      <tr><th>Tool</th><th>What it does</th></tr>
+      <tr><td>add_diary_entry</td><td>Saves an activity for a local date</td></tr>
+      <tr><td>get_diary_entries</td><td>Lists entries for a date or range, with optional keyword search</td></tr>
+      <tr><td>update_diary_entry</td><td>Edits an entry by id</td></tr>
+      <tr><td>create_reminder</td><td>Schedules a reminder in the user's timezone and rejects past times</td></tr>
+      <tr><td>list_reminders</td><td>Shows pending reminders, or reminders with any status</td></tr>
+      <tr><td>delete_reminder</td><td>Cancels a reminder (kept with status <code>cancelled</code>)</td></tr>
+      <tr><td>get_daily_summary</td><td>Returns one day's entries and the counts computed from them</td></tr>
+      <tr><td>get_weekly_summary</td><td>Returns the last 7 days of entries with computed counts</td></tr>
+      <tr><td>get_weather</td><td>Gets real Open-Meteo data: current, forecast or historical</td></tr>
+      <tr><td>set_timezone</td><td>Saves the user's IANA timezone</td></tr>
+    </table></div>
+  </section>
+
+  <section>
+    <h2>How reminders are delivered</h2>
+    <p>n8n is the only scheduler. Every minute it leases the reminders that are due, then asks the server to deliver each one. The server sends the Telegram message and records the result, so a reminder is marked <code>sent</code> only after Telegram confirms it.</p>
+    <div class="diagram"><pre class="mermaid">
+sequenceDiagram
+  participant N as n8n (every minute)
+  participant S as DayMate server
+  participant D as SQLite
+  participant T as Telegram
+  N->>S: POST /api/reminders/claim-due
+  S->>D: lease due pending reminders (5 min)
+  S-->>N: leased reminders
+  loop each reminder
+    N->>S: POST /api/reminders/{id}/deliver
+    S->>T: sendMessage
+    alt Telegram confirms
+      S->>D: status = sent
+      S-->>N: 200 · Delivered
+    else send fails
+      S->>D: release lease, record error, attempt + 1
+      S-->>N: 502 · will retry (failed after 5 attempts)
+    end
+  end
+    </pre></div>
+    <ul>
+      <li><strong>No duplicates:</strong> a leased reminder is invisible to overlapping runs. A repeated delivery call finds it already sent and sends nothing.</li>
+      <li><strong>Retries:</strong> failures stay <code>pending</code> and are retried up to 5 times, then become <code>failed</code>.</li>
+      <li><strong>Why the server sends:</strong> Telegram is unreliable from inside Docker on this network, and n8n then needs no Telegram credential.</li>
+    </ul>
+    <p>The daily (23:00) and weekly (Sunday 20:00) workflows ask the server which users are due in their own timezone. An n8n AI Agent node with the Groq model writes the summary from the returned entries, and the server sends it.</p>
+  </section>
+
+  <section>
+    <h2>Data model</h2>
+    <div class="diagram"><pre class="mermaid">
+erDiagram
+  USERS ||--o{ DIARY_ENTRIES : writes
+  USERS ||--o{ REMINDERS : sets
+  USERS { int id PK
+    text platform
+    text platform_user_id
+    text chat_id
+    text timezone }
+  DIARY_ENTRIES { int id PK
+    int user_id FK
+    text entry_date "local date"
+    text description
+    text category
+    int duration_minutes }
+  REMINDERS { int id PK
+    int user_id FK
+    text message
+    text scheduled_at_utc
+    text timezone
+    text status "pending/sent/cancelled/failed"
+    text lease_until_utc
+    int attempt_count
+    text last_error }
+    </pre></div>
+  </section>
+
+  <section>
+    <h2>Design rules</h2>
+    <ul>
+      <li><strong>Identity:</strong> no tool accepts a <code>user_id</code>. Our code sets the user in a request header, so the model cannot read or change another user's data.</li>
+      <li><strong>Truthfulness:</strong> the agent confirms an action only after the tool reports success. Summary counts and totals are computed in code, and the LLM writes only the prose.</li>
+      <li><strong>Time:</strong> reminders are stored in UTC with the user's timezone and shown in local time. Vague times such as "tomorrow morning" make the agent ask for an exact time.</li>
+      <li><strong>Secrets:</strong> keys live in <code>.env</code> and in n8n's encrypted credential store. The API listens on localhost behind a bearer token.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Verification</h2>
+    <div class="table-wrap"><table>
+      <tr><th>Check</th><th>Result</th><th></th></tr>
+      <tr><td>Automated tests</td><td>52 tests: services, timezones and DST, user isolation, leases and retries, MCP over HTTP, agent loop, Groq adapter, Telegram sender</td><td><span class="status">pass</span></td></tr>
+      <tr><td>Live Groq agent</td><td>9 scenarios through the real model and real MCP tools: diary add, view and update; reminder create, list and cancel; vague-time clarification; daily and weekly summaries</td><td><span class="status">pass</span></td></tr>
+      <tr><td>Open-Meteo</td><td>Current, forecast and historical endpoints return real data</td><td><span class="status">pass</span></td></tr>
+      <tr><td>Reminder delivery</td><td>n8n delivered an overdue reminder and later ones to Telegram; each was marked sent once and a re-run sent nothing</td><td><span class="status">pass</span></td></tr>
+      <tr><td>Summary workflows</td><td>Ran end to end in n8n; the AI Agent produced a grounded report</td><td><span class="status">pass</span></td></tr>
+      <tr><td>Summary schedules</td><td>Daily and weekly workflows are built but not yet switched on</td><td><span class="status open">inactive</span></td></tr>
+    </table></div>
+  </section>
+
+  <section>
+    <h2>Running it</h2>
+    <p>Prerequisites: Docker Desktop running and <code>.env</code> filled in (<code>GROQ_API_KEY</code>, <code>TELEGRAM_BOT_TOKEN</code>, <code>MCP_AUTH_TOKEN</code>).</p>
+<pre class="cmd">D:\DayMate\start_daymate.bat     # starts n8n, the server and the Telegram bot
+D:\DayMate\stop_daymate.bat      # stops everything; data is kept</pre>
+    <p>Then message <code>@DayMate_aiBot</code> on Telegram. n8n runs at <code>http://localhost:5678</code>.</p>
+  </section>
+
+  <footer>DayMate · CP1 project report · November 2026</footer>
+</div>

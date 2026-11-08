@@ -1,0 +1,42 @@
+INFO:     Started server process [6252]
+INFO:     Waiting for application startup.
+2026-11-03 21:23:31,559 mcp.server.streamable_http_manager INFO StreamableHTTP session manager started
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+2026-11-03 21:27:08,361 daymate.delivery INFO reminder 1 delivered (marked_sent=True)
+2026-11-03 21:34:24,643 mcp.server.streamable_http INFO Terminating session: None
+2026-11-03 21:34:24,657 mcp.server.streamable_http INFO Terminating session: None
+2026-11-03 21:34:24,668 mcp.server.lowlevel.server INFO Processing request of type ListToolsRequest
+2026-11-03 21:34:24,672 mcp.server.streamable_http INFO Terminating session: None
+2026-11-03 21:34:26,655 mcp.server.lowlevel.server INFO Processing request of type CallToolRequest
+2026-11-03 21:34:26,673 mcp.server.streamable_http INFO Terminating session: None
+2026-11-03 21:36:35,650 daymate.delivery INFO reminder 2 delivered (marked_sent=True)
+2026-11-03 21:37:26,350 mcp.server.streamable_http INFO Terminating session: None
+2026-11-03 21:37:26,362 mcp.server.streamable_http INFO Terminating session: None
+2026-11-03 21:37:26,375 mcp.server.lowlevel.server INFO Processing request of type ListToolsRequest
+2026-11-03 21:37:26,378 mcp.server.streamable_http INFO Terminating session: None
+2026-11-03 21:37:42,638 mcp.server.streamable_http INFO Terminating session: None
+2026-11-03 21:37:42,650 mcp.server.streamable_http INFO Terminating session: None
+2026-11-03 21:37:42,661 mcp.server.lowlevel.server INFO Processing request of type ListToolsRequest
+2026-11-03 21:37:42,664 mcp.server.streamable_http INFO Terminating session: None
+2026-11-03 21:37:44,278 mcp.server.lowlevel.server INFO Processing request of type CallToolRequest
+2026-11-03 21:37:44,298 mcp.server.streamable_http INFO Terminating session: None
+2026-11-03 21:38:36,005 daymate.delivery INFO reminder 3 delivered (marked_sent=True)
+2026-11-03 21:41:17,533 mcp.server.streamable_http INFO Terminating session: None
+2026-11-03 21:41:17,545 mcp.server.streamable_http INFO Terminating session: None
+2026-11-03 21:41:17,556 mcp.server.lowlevel.server INFO Processing request of type ListToolsRequest
+2026-11-03 21:41:17,560 mcp.server.streamable_http INFO Terminating session: None
+2026-11-03 21:41:18,944 mcp.server.lowlevel.server INFO Processing request of type CallToolRequest
+2026-11-03 21:41:18,953 mcp.server.streamable_http INFO Terminating session: None
+2026-11-03 21:43:56,268 mcp.server.streamable_http INFO Terminating session: None
+2026-11-03 21:43:56,281 mcp.server.streamable_http INFO Terminating session: None
+2026-11-03 21:43:56,291 mcp.server.lowlevel.server INFO Processing request of type ListToolsRequest
+2026-11-03 21:43:56,296 mcp.server.streamable_http INFO Terminating session: None
+2026-11-03 21:43:57,749 mcp.server.lowlevel.server INFO Processing request of type CallToolRequest
+2026-11-03 21:43:57,770 mcp.server.streamable_http INFO Terminating session: None
+2026-11-03 21:43:58,678 mcp.server.lowlevel.server INFO Processing request of type CallToolRequest
+2026-11-03 21:43:58,697 mcp.server.streamable_http INFO Terminating session: None
+2026-11-03 21:43:59,625 mcp.server.lowlevel.server INFO Processing request of type CallToolRequest
+2026-11-03 21:43:59,637 mcp.server.streamable_http INFO Terminating session: None
+2026-11-03 21:44:03,118 mcp.server.lowlevel.server INFO Processing request of type CallToolRequest
+2026-11-03 21:44:03,129 mcp.server.streamable_http INFO Terminating session: None
